@@ -45,14 +45,14 @@ if [ $SYSTEM -eq $SYS_LINUX ]; then
     # get ip
     NET_IP=$(ifconfig $NET_DEVICE | grep inet | awk '$1=="inet" {print $2}')
     # get display number
-    DISPLAY_NO=$(ps -ef | grep "Xquartz :\d" | grep -v xinit | awk '{ print $9; }')
+    DISPLAY_NO=$(ps -ef | grep "Xorg -core :\d" | grep -v "grep" | awk '{ print $10; }')
 elif [ $SYSTEM -eq $SYS_MAC ]; then
     # get default gateway device
     NET_DEVICE=$(route get default | grep "interface: " | head -1 | awk '{ print $2 }')
     # get ip
     NET_IP=$(ifconfig $NET_DEVICE | grep inet | awk '$1=="inet" {print $2}')
     # get display number
-    DISPLAY_NO=$(ps -ef | grep "Xquartz :\d" | grep -v xinit | awk '{ print $9; }')
+    DISPLAY_NO=$(ps -ef | grep "Xquartz :\d" | grep -v "xinit" | awk '{ print $9; }')
 fi
 
 # allow X-server to receive connections from current machine

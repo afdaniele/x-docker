@@ -43,7 +43,7 @@ if [ $SYSTEM -eq $SYS_LINUX ]; then
     # get default gateway device
     NET_DEVICE=$(ip r | grep "default via " | head -1 | awk '{ print $5 }')
     # get ip
-    NET_IP=$(ifconfig $NET_DEVICE | grep inet | awk '$1=="inet" {print $2}')
+    NET_IP=$(ifconfig $NET_DEVICE | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1)
     # get display number
     DISPLAY_NO=$(ps -ef | grep "Xorg -core :\d" | grep -v "grep" | awk '{ print $10; }')
 elif [ $SYSTEM -eq $SYS_MAC ]; then

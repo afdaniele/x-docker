@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# arguments and constants
+SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+INSTALL_DIR="/usr/local"
+
+# make sure the script is running as root
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit 1
+fi
+
+# install script
+cat << EOF
+    Installing:
+        - $SOURCE_DIR/x-docker -> $INSTALL_DIR/bin/
+EOF
+cp "$SOURCE_DIR/x-docker" "$INSTALL_DIR/bin/"
+echo "Done!"

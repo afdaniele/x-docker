@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+
+# constants
+SYS_LINUX=0
+SYS_MAC=1
+
+# variables (default values)
+SYSTEM=-1
+NET_DEVICE=""
+NET_IP=127.0.0.1
+DISPLAY_NO=0
+
+# get current system
+system_codename="$(uname -s)"
+case "${system_codename}" in
+    Linux*)  # Linux
+        echo "Running X-Docker on Linux (`uname -r`)."
+        SYSTEM=$SYS_LINUX
+        ;;
+    Darwin*) # Mac OSX
+        echo "Running X-Docker on Mac OSX (`uname -r`)."
+        SYSTEM=$SYS_MAC
+        ;;
+    *)       # System not supported
+        echo "System '${system_codename}' not supported."
+        exit 1
+esac
+
+# get default gateway device, its IP address, and the X display number
+if [ $SYSTEM -eq $SYS_LINUX ]; then
+    # get default gateway device
+    NET_DEVICE=$(ip r | grep "default via " | head -1 | awk '{ print $5 }')
+    # get ip
+    NET_IP=$(ifconfig $NET_DEVICE | grep inet | awk '$1=="inet" {print $2}')
+    # get display number
+    DISPLAY_NO=$(ps -ef | grep "Xquartz :\d" | grep -v xinit | awk '{ print $9; }')
+elif [ $SYSTEM -eq $SYS_MAC ]; then
+    # get default gateway device
+    NET_DEVICE=$(route get default | grep "interface: " | head -1 | awk '{ print $2 }')
+    # get ip
+    NET_IP=$(ifconfig $NET_DEVICE | grep inet | awk '$1=="inet" {print $2}')
+    # get display number
+    DISPLAY_NO=$(ps -ef | grep "Xquartz :\d" | grep -v xinit | awk '{ print $9; }')
+fi
+
+# allow X-server to receive connections from current machine
+xhost + $NET_IP
+
+# start XQuartz (if needed)
+if [ $SYSTEM -eq $SYS_MAC ]; then
+    APP_NAME="XQuartz"
+    if [ $(ps aux | grep $APP_NAME | wc -l) -le 0 ]; then
+        # XQuartz is not running (give XQuartz time to start)
+        echo "Launching XQuartz, this will take 10 seconds."
+        open -a XQuartz
+        sleep 10
+    fi
+
+fi
+
+X_DOCKER=${X_DOCKER:-"docker"}
+
+DOCKER_ARGS=()
+X_DOCKER_ARGS=()
+while [ $# -gt 0 ]; do
+    arg=$1
+    shift
+    DOCKER_ARGS+=("$arg")
+    case $arg in
+        run|create)
+            X_DOCKER_ARGS+=(\
+                -it \
+                -e DISPLAY=$NET_IP$DISPLAY_NO \
+                -v /tmp/.X11-unix:/tmp/.X11-unix \
+            )
+            break
+        ;;
+        version)
+            printf "X-Docker: 0.1.0\n"
+            break
+        ;;
+        --)
+            break
+        ;;
+    esac
+done
+
+
+# DEBUG only
+echo $X_DOCKER "${DOCKER_ARGS[@]}" "${X_DOCKER_ARGS[@]}" "$@"
+
+exec $X_DOCKER "${DOCKER_ARGS[@]}" "${X_DOCKER_ARGS[@]}" "$@"

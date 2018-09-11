@@ -26,6 +26,18 @@ case "${system_codename}" in
         exit 1
 esac
 
+# wait for XQuartz to start (if needed)
+if [ $SYSTEM -eq $SYS_MAC ]; then
+    APP_NAME="XQuartz"
+    APP_COUNT=$(ps aux | grep $APP_NAME | grep -v "grep" | wc -l | awk '{print $1}')
+    if [ $APP_COUNT -le 0 ]; then
+        # XQuartz is not running (give XQuartz time to start)
+        open -a $APP_NAME
+        echo "Waiting for X to be ready"
+        sleep 4
+    fi
+fi
+
 # get default gateway device, its IP address, and the X display number
 if [ $SYSTEM -eq $SYS_LINUX ]; then
     # get default gateway device
@@ -45,18 +57,6 @@ fi
 
 # allow X-server to receive connections from current machine
 xhost + $NET_IP
-
-# start XQuartz (if needed)
-if [ $SYSTEM -eq $SYS_MAC ]; then
-    APP_NAME="XQuartz"
-    if [ $(ps aux | grep $APP_NAME | wc -l) -le 0 ]; then
-        # XQuartz is not running (give XQuartz time to start)
-        echo "Launching XQuartz, this will take 10 seconds."
-        open -a XQuartz
-        sleep 10
-    fi
-
-fi
 
 X_DOCKER=${X_DOCKER:-"docker"}
 

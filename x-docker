@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+__VERSION__="0.1.0"
+
 # constants
 SYS_LINUX=0
 SYS_MAC=1
@@ -8,7 +10,7 @@ SYS_MAC=1
 SYSTEM=-1
 NET_DEVICE=""
 NET_IP=127.0.0.1
-DISPLAY_NO=0
+DISPLAY_NO=":0"
 
 # get current system
 system_codename="$(uname -s)"
@@ -75,7 +77,7 @@ while [ $# -gt 0 ]; do
             break
         ;;
         version)
-            printf "X-Docker: 0.1.0\n"
+            printf "X-Docker: v${__VERSION__}\n"
             break
         ;;
         --)

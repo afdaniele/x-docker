@@ -38,14 +38,14 @@ if [ $SYSTEM -eq $SYS_MAC ]; then
     fi
 fi
 
-# get default gateway device, its IP address, and the X display number
+# get IP address, and the X display number
 if [ $SYSTEM -eq $SYS_LINUX ]; then
-    # get default gateway device
-    NET_DEVICE=$(ip r | grep "default via " | head -1 | awk '{ print $5 }')
     # get ip
-    NET_IP=$(ifconfig $NET_DEVICE | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1)
+    NET_IP=''
     # get display number
-    DISPLAY_NO=$(ps -ef | grep "Xorg -core :\d" | grep -v "grep" | awk '{ print $10; }')
+    DISPLAY_NO=$DISPLAY
+    # allow X-server to receive connections from current machine
+    xhost +local:root
 elif [ $SYSTEM -eq $SYS_MAC ]; then
     # get default gateway device
     NET_DEVICE=$(route get default | grep "interface: " | head -1 | awk '{ print $2 }')
@@ -53,10 +53,9 @@ elif [ $SYSTEM -eq $SYS_MAC ]; then
     NET_IP=$(ifconfig $NET_DEVICE | grep inet | awk '$1=="inet" {print $2}')
     # get display number
     DISPLAY_NO=$(ps -ef | grep "Xquartz :\d" | grep -v "xinit" | awk '{ print $9; }')
+    # allow X-server to receive connections from current machine
+    xhost + $NET_IP
 fi
-
-# allow X-server to receive connections from current machine
-xhost + $NET_IP
 
 X_DOCKER=${X_DOCKER:-"docker"}
 

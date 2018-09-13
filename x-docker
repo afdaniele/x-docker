@@ -88,6 +88,6 @@ done
 
 
 # DEBUG only
-echo $X_DOCKER "${DOCKER_ARGS[@]}" "${X_DOCKER_ARGS[@]}" "$@"
+# echo $X_DOCKER "${DOCKER_ARGS[@]}" "${X_DOCKER_ARGS[@]}" "$@"
 
 exec $X_DOCKER "${DOCKER_ARGS[@]}" "${X_DOCKER_ARGS[@]}" "$@"

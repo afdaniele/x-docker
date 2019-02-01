@@ -59,10 +59,17 @@ elif [ $SYSTEM -eq $SYS_MAC ]; then
     xhost + $NET_IP
 fi
 
-X_DOCKER=${X_DOCKER:-"docker"}
+# set default docker binary
+X_DOCKER="docker"
+
+# choose nvidia-docker (if available)
+which "nvidia-docker" >/dev/null 2>&1
+if [ $? -eq 0 ] ; then
+    X_DOCKER="nvidia-docker"
+fi
 
 DOCKER_ARGS=()
-X_DOCKER_ARGS=()
+X_DOCKER_ARGS=(-e QT_X11_NO_MITSHM=1)
 while [ $# -gt 0 ]; do
     arg=$1
     shift

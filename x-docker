@@ -30,6 +30,9 @@ esac
 
 # wait for XQuartz to start (if needed)
 if [ $SYSTEM -eq $SYS_MAC ]; then
+    # enable hardware acceleration (for Mac OSX Mojave or newer)
+    defaults write org.macosforge.xquartz.X11 enable_iglx -bool true
+    # open XQuartz
     APP_NAME="XQuartz"
     APP_COUNT=$(ps aux | grep $APP_NAME | grep -v "grep" | wc -l | awk '{print $1}')
     if [ $APP_COUNT -le 0 ]; then

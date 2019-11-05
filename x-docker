@@ -72,7 +72,7 @@ if [ $? -eq 0 ] ; then
 fi
 
 DOCKER_ARGS=()
-X_DOCKER_ARGS=(-e QT_X11_NO_MITSHM=1)
+X_DOCKER_ARGS=()
 while [ $# -gt 0 ]; do
     arg=$1
     shift
@@ -82,6 +82,7 @@ while [ $# -gt 0 ]; do
             X_DOCKER_ARGS+=(\
                 -it \
                 -e DISPLAY=$NET_IP$DISPLAY_NO \
+                -e QT_X11_NO_MITSHM=1 \
                 -v /tmp/.X11-unix:/tmp/.X11-unix \
             )
             break

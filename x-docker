@@ -64,15 +64,19 @@ fi
 
 # set default docker binary
 X_DOCKER="docker"
+DOCKER_ARGS=()
+X_DOCKER_ARGS=()
 
 # choose nvidia-docker (if available)
 which "nvidia-docker" >/dev/null 2>&1
 if [ $? -eq 0 ] ; then
     X_DOCKER="nvidia-docker"
+    X_DOCKER_ARGS+=(\
+        -e NVIDIA_VISIBLE_DEVICES=all \
+        -e NVIDIA_DRIVER_CAPABILITIES=graphics \
+    )
 fi
 
-DOCKER_ARGS=()
-X_DOCKER_ARGS=()
 while [ $# -gt 0 ]; do
     arg=$1
     shift

@@ -1,6 +1,6 @@
-# x-docker
+# `x-docker` - Command Line Wrapper
 
-**x-docker** is a wrapper around **docker-cli** that lets you run GUI applications by exposing the X11 server to the container.
+**x-docker** (cli) is a wrapper around **docker-cli** that lets you run GUI applications by exposing the X11 server to the container.
 
 ## Install x-docker
 

@@ -1,20 +1,9 @@
-# x-docker
+# X-Docker
 
-**x-docker** is a wrapper around **docker-cli** that lets you run GUI applications by exposing the X11 server to the container.
+**X-Docker** is a utility tool that makes it easy to configure a Docker container for use with GUI applications.
+There are two versions of **X-Docker**:
 
-## Install x-docker
+- A command-line wrapper for Docker. It lets you run GUI applications in Docker simply by running `x-docker run ...`;
+- A Python library. It gives you the arguments to pass to the Docker SDK for Python in order to run GUI-enabled containers;
 
-Clone the repository and run the following command to install **x-docker**:
-
-```
-sudo ./install
-```
-
-## How to use it
-
-If your application has a GUI, replace **docker** with **x-docker** in your command. For example, you can run
-Inkscape simply by running:
-
-```
-x-docker run jess/inkscape
-```
+Further information can be found in the specific directories.

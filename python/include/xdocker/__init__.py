@@ -24,3 +24,8 @@ def _from_system() -> Type[XDockerConfigurator]:
 def get_configuration(client: DockerClient) -> dict:
     configurator = _from_system()
     return configurator.get_configuration(client)
+
+
+__all__ = [
+    "get_configuration"
+]

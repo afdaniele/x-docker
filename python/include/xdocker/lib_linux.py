@@ -20,7 +20,7 @@ class XDockerLinuxConfigurator(XDockerConfigurator):
         # add nvidia capabilities if we are using nvidia GPUs
         if XDockerLinuxConfigurator.nvidia_gpu(client):
             environment["NVIDIA_VISIBLE_DEVICES"] = "all"
-            environment["NVIDIA_DRIVER_CAPABILITIES"] = "graphics"
+            environment["NVIDIA_DRIVER_CAPABILITIES"] = "all"
             config["runtime"] = "nvidia"
         # support QT
         environment["QT_X11_NO_MITSHM"] = "1"

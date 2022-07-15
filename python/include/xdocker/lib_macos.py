@@ -38,7 +38,7 @@ class XDockerMacOSConfigurator(XDockerConfigurator):
             "ps -ef | grep \"Xquartz :\" | grep -v xinit | awk '{ print $9; }'", shell=True).decode("utf-8").strip()
         environment["DISPLAY"] = DISPLAY_NO
         # allow X-server to receive connections from current machine
-        subprocess.check_call(f"xhost + {NET_IP}", shell=True)
+        subprocess.check_call(f"DISPLAY={DISPLAY_NO} xhost + {NET_IP}", shell=True)
         # ---
         config["environment"] = environment
         return config

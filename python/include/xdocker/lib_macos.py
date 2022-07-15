@@ -40,9 +40,15 @@ class XDockerMacOSConfigurator(XDockerConfigurator):
         DISPLAY_NO = subprocess.check_output(
             "ps -ef | grep \"Xquartz :\" | grep -v xinit | awk '{ print $9; }'", shell=True).decode("utf-8").strip()
         print(f"X-Docker: Detected display number is: {DISPLAY_NO}")
-        environment["DISPLAY"] = DISPLAY_NO
+        environment["DISPLAY"] = f"{NET_IP}{DISPLAY_NO}"
         # allow X-server to receive connections from current machine
-        # subprocess.check_call(f"xhost + {NET_IP}", shell=True, env={"DISPLAY": DISPLAY_NO})
+        subprocess.check_call(f"xhost + {NET_IP}", shell=True)
+        # support QT
+        environment["QT_X11_NO_MITSHM"] = "1"
+        # mount x-server socket
+        config["volumes"] = {
+            '/tmp/.X11-unix': {'bind': '/tmp/.X11-unix', 'mode': 'rw'}
+        }
         # ---
         config["environment"] = environment
         return config

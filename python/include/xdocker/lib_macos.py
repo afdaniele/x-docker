@@ -18,7 +18,7 @@ class XDockerMacOSConfigurator(XDockerConfigurator):
             ["defaults", "write", "org.macosforge.xquartz.X11", "enable_iglx", "-bool", "true"])
         # start XQuartz
         app_count = subprocess.check_output(
-            "ps aux | grep $APP_NAME | grep -v 'grep' | wc -l | awk '{print $1}'", shell=True).decode("utf-8").strip()
+            "ps aux | grep XQuartz | grep -v grep | wc -l | awk '{print $1}'", shell=True).decode("utf-8").strip()
         try:
             app_count = int(app_count)
         except ValueError:
@@ -37,7 +37,7 @@ class XDockerMacOSConfigurator(XDockerConfigurator):
         print("NET_IP", NET_IP)
         # get display number
         DISPLAY_NO = subprocess.check_output(
-            "ps - ef | grep \"Xquartz :\" | grep -v xinit | awk '{ print $9; }'", shell=True).decode("utf-8").strip()
+            "ps -ef | grep \"Xquartz :\" | grep -v xinit | awk '{ print $9; }'", shell=True).decode("utf-8").strip()
         print("DISPLAY_NO", DISPLAY_NO)
         environment["DISPLAY"] = DISPLAY_NO
         # allow X-server to receive connections from current machine

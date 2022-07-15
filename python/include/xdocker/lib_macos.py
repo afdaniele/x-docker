@@ -29,13 +29,16 @@ class XDockerMacOSConfigurator(XDockerConfigurator):
             time.sleep(4)
         # get default gateway device
         NET_DEVICE = subprocess.check_output(
-            "route get default | grep 'interface: ' | head -1 | awk '{ print $2 }'")
+            "route get default | grep 'interface: ' | head -1 | awk '{ print $2 }'", shell=True)
+        print("NET_DEVICE", NET_DEVICE)
         # get ip
         NET_IP = subprocess.check_output(
-            "ifconfig %s | grep inet | awk '$1==\"inet\" {print $2}'" % NET_DEVICE)
+            "ifconfig %s | grep inet | awk '$1==\"inet\" {print $2}'" % NET_DEVICE, shell=True)
+        print("NET_IP", NET_IP)
         # get display number
         DISPLAY_NO = subprocess.check_output(
-            "ps - ef | grep \"Xquartz :\" | grep -v xinit | awk '{ print $9; }'")
+            "ps - ef | grep \"Xquartz :\" | grep -v xinit | awk '{ print $9; }'", shell=True)
+        print("DISPLAY_NO", DISPLAY_NO)
         environment["DISPLAY"] = DISPLAY_NO
         # allow X-server to receive connections from current machine
         subprocess.check_call(f"xhost + {NET_IP}")

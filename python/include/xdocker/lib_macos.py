@@ -42,7 +42,7 @@ class XDockerMacOSConfigurator(XDockerConfigurator):
         print(f"X-Docker: Detected display number is: {NET_DEVICE}")
         environment["DISPLAY"] = DISPLAY_NO
         # allow X-server to receive connections from current machine
-        subprocess.check_call(f"xhost + {NET_IP}", shell=True, env={"DISPLAY": DISPLAY_NO})
+        # subprocess.check_call(f"xhost + {NET_IP}", shell=True, env={"DISPLAY": DISPLAY_NO})
         # ---
         config["environment"] = environment
         return config

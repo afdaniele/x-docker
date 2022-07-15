@@ -39,7 +39,7 @@ class XDockerMacOSConfigurator(XDockerConfigurator):
         # get display number
         DISPLAY_NO = subprocess.check_output(
             "ps -ef | grep \"Xquartz :\" | grep -v xinit | awk '{ print $9; }'", shell=True).decode("utf-8").strip()
-        print(f"X-Docker: Detected display number is: {NET_DEVICE}")
+        print(f"X-Docker: Detected display number is: {DISPLAY_NO}")
         environment["DISPLAY"] = DISPLAY_NO
         # allow X-server to receive connections from current machine
         # subprocess.check_call(f"xhost + {NET_IP}", shell=True, env={"DISPLAY": DISPLAY_NO})

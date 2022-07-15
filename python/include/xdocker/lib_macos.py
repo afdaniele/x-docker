@@ -24,10 +24,9 @@ class XDockerMacOSConfigurator(XDockerConfigurator):
         except ValueError:
             app_count = 0
         if app_count <= 0:
-            print("WARNING: You need to launch XQuartz")
-            # # start Xquartz
-            # subprocess.check_call("open -a XQuartz", shell=True)
-            # time.sleep(4)
+            # start Xquartz
+            subprocess.check_call("open -a XQuartz", shell=True)
+            time.sleep(5)
         # get default gateway device
         NET_DEVICE = subprocess.check_output(
             "route get default | grep 'interface: ' | head -1 | awk '{ print $2 }'", shell=True).decode("utf-8").split('\n')[0]

@@ -25,7 +25,7 @@ class XDockerMacOSConfigurator(XDockerConfigurator):
             app_count = 0
         if app_count <= 0:
             # start Xquartz
-            subprocess.check_call("open -a XQuartz")
+            subprocess.check_call("open -a XQuartz", shell=True)
             time.sleep(4)
         # get default gateway device
         NET_DEVICE = subprocess.check_output(
